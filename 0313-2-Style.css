@@ -306,6 +306,7 @@
     box-sizing: border-box;
     position: relative;
     padding: 10px;
+
 }
 .Featured-1 div img{
     width: 100%;
@@ -339,6 +340,22 @@
     font-size: 22px;
     position: absolute;
     left:80px;
+}
+.yuri{
+
+    position: absolute;
+    left: -10px;
+    top: 35px;
+}
+.yuri button{
+    background-color: white;
+    padding: 10px;
+    border: black 1px solid;
+    margin: 2px;
+    border-radius: 5px;
+}
+.yuri button:hover{
+    background-color:rgb(255, 208, 0); ;
 }
 .Fresh-Berries{
     width: 1200px;
@@ -451,13 +468,13 @@
     text-align: center;
     padding-top: 20px;
     display: block;
-    font-size: 30px;
-    padding-bottom: 50px;
+    font-size: 50px;
+    padding-bottom: 20px;
 }
 .right-2 .sale img{
     width: 100%;
     background-color: #eee;
-    margin-bottom: 20px;
+    margin-bottom: 2px;
 }
 .Featured {
     text-align: center;
@@ -538,7 +555,7 @@
 .moo i{
     font-size: 50px;
     padding: 15px;
-    
+
 }
 .moo i:hover{
     color:rgb(255, 208, 0);
