@@ -16,6 +16,17 @@
     top: 10px;
     left: 290px;
 }
+.B{
+    position: absolute;
+    top: 20px;
+    right: 380px;
+}
+.B i{
+    padding-left:20px ;
+}
+.B i:hover{
+    color:rgb(255, 208, 0);
+}
 .secode{
     height: 120px;
     display: flex;
@@ -522,6 +533,19 @@
     width: 100%;
     height: 80px;
     background-color: #eee;
+    position: relative;
+}
+.moo i{
+    font-size: 50px;
+    padding: 15px;
+    
+}
+.moo i:hover{
+    color:rgb(255, 208, 0);
+}
+.moo{
+    position: absolute;
+    left: 140px;
 }
 .last-1{
     background-color:yellow;
