@@ -82,7 +82,8 @@
     position: absolute;
     bottom: -50px;
     right: 0;
-    border: #eee solid 8px;
+    border-bottom: #eee solid 8px;
+    border-left: #eee solid 8px;
 }
 .pp p{
     font-size: 80px;
