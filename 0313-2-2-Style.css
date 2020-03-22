@@ -95,8 +95,8 @@ input:checked~.header-nav{
     padding: 20px  0;
     box-sizing: border-box;
     background-color: white;
-    /* position: sticky;
-    top: 0; */
+    position: sticky;
+    top: 0;
 }
 .container-header-left{
     width: 50%;
