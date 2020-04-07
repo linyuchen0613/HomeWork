@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <button>iphone</button>
+    <button>ipad</button>
+    <button>Mac</button>
+    <button>AppleWatch</button>
+
+
+
+
+
+
+
+    <script>
+        // iphone  iPad  Mac  AppleWatch
+        // 物件裡沒有等號
+        var products = {
+            iphone: {
+                p01: { id: 'p01', color: 'red', price: '25000', storage: '64G', network: 'Wifi', pic: 'p01.jpg', url: 'https://www.apple.com/tw/shop/buy-iphone/iphone-11/6.1-%E5%90%8B%E9%A1%AF%E7%A4%BA%E5%99%A8-64gb-%E7%B4%85%E8%89%B2' },
+                p02: { id: 'p02', color: 'yellow', price: '27000', storage: '128G', network: 'Wifi', pic: 'p02.jpg', url: 'https://www.apple.com/tw/shop/buy-iphone/iphone-11/6.1-%E5%90%8B%E9%A1%AF%E7%A4%BA%E5%99%A8-128gb-%E9%BB%83%E8%89%B2' },
+                p03: { id: 'p03', color: 'green', price: '28000', storage: '256G', network: 'Wifi', pic: 'p03.jpg', url: 'https://www.apple.com/tw/shop/buy-iphone/iphone-11/6.1-%E5%90%8B%E9%A1%AF%E7%A4%BA%E5%99%A8-256gb-%E7%B6%A0%E8%89%B2' }
+            },
+            iPad: {
+
+            },
+            Mac: {
+
+            },
+            AppleWatch: {
+
+            }
+        };
+        var color;
+        var type;
+        console.log(color);
+        console.log(type);
+
+        var showArea = document.getElementById('app');
+
+        var colorBtnArea = document.getElementById('color');
+        var typeBtnArea = document.getElementById('type');
+        var productsArea = document.getElementById('show');
+
+        // IPhone Btn
+        var iphoneBtn = document.getElementById('iphone');
+        iphoneBtn.addEventListener('click', function () {
+            for (let i = 0; i < products.iphone.length; i++) {
+                colorBtnArea.innerHTML += `<button onclick="GetColor(this)">${products.iphone[i].color}</button>`;
+                typeBtnArea.innerHTML += `<button onclick="GetType(this)">${products.iphone[i].storage}</button>`;
+                productsArea.innerHTML += `<div><img id="img" scr="${products.iphone[i].url}" alt="產品欄"> <p>${products.iphone}</p> </div>`;
+            }
+        });
+
+    </script>
+</body>
+
+</html>
