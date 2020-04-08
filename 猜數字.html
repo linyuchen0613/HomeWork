@@ -15,16 +15,17 @@
         <div class="row ">
             <div class="col-12 btn-group mt-3 mb-3" role="group" aria-label="Basic example">
                 <button type="button" class="col-4 btn btn-secondary" onclick="Btnrandomstart()">開始</button>
-                <button type="button" class="col-4 btn btn-secondary">放棄重來</button>
-                <button type="button" class="col-4 btn btn-secondary">看答案</button>
+                <button type="button" class="col-4 btn btn-secondary" onclick="reset()">放棄重來</button>
+                <button type="button" onclick="check()" class="col-4 btn btn-secondary">看答案</button>
             </div>
-            <div class="col-12 input-group mt-5">
+            <div class="col-12" id="stroy"></div>
+            <div class="col-12 input-group mt-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">猜答案</span>
                 </div>
-                <input type="text" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1">
+                <input type="text" class="form-control" id="inputnumber" placeholder="" aria-label="Username" aria-describedby="basic-addon1" disabled>
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" id="button-addon2">猜!</button>
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="guess()">猜!</button>
                 </div>
             </div>
         </div>
@@ -32,28 +33,99 @@
     
 
     <script>
-
+        var corrent=new Array(4);
+        var inputnumber=document.getElementById('inputnumber');
+        var stroy=document.getElementById('stroy');
         function Btnrandomstart(){
+            inputnumber.disabled=false;
+            stroy.innerHTML="";
+            for(let i = 0;i<corrent.length;i++){
+                
+                corrent[i]=Math.floor(Math.random()*10);
+                if(i!=0&&(corrent[i]==corrent[i-1]||corrent[i]==corrent[i-2]||corrent[i]==corrent[i-3])){
+                    i--;
+                }
+            }
+            console.log(corrent);
+        }
+
+        
+
+        function check(){
+            alert(`答案為${parseInt(corrent[0])}${parseInt(corrent[1])}${parseInt(corrent[2])}${parseInt(corrent[3])}`)
+        }
+
+        
+
+        function guess(){
+            var A=0;
+            var B=0;
+            for(let i=0;i<inputnumber.value.length;i++){
+                if(parseInt(inputnumber.value)>9999){
+                    alert("只能輸入4位數");
+                    inputnumber.value = "輸入錯誤";
+                }
+                for(let j=0;j<inputnumber.value.length;j++){
+                    if(j!=0&&(inputnumber.value[j]==inputnumber.value[j-1]||inputnumber.value[j]==inputnumber.value[j-2])||inputnumber.value[j]==inputnumber.value[j-3]){
+                        alert("4位數字不可重複");
+                        inputnumber.value = "輸入錯誤";
+                        break;
+                    }
+                }
+                            
+                if(inputnumber.value[i]==corrent[i]){
+                    A++;
+                }
+                else if(inputnumber.value[i]!=corrent[i]){
+                    for(let j=0;j<inputnumber.value.length;j++){
+                        if(j==i) continue;
+                        if(inputnumber.value[j]==corrent[i]){
+                            B++;
+                        }
+                    }
+                }
+            }
+
             
+
+            var _div=document.createElement('div');
+            var _div_1=document.createElement('div');
+            var _outword=document.createElement('span');
+            var _histroy=document.createElement('p');
+            _histroy.innerText=inputnumber.value;
+            if(A==4&&B==0){
+                _outword.innerText=`${A}A${B}B`;
+                _outword.style.backgroundColor="green";
+                _outword.style.color="#fff";
+                alert("遊戲結束");
+            }
+            else if(A!=4||B!=0){
+                _outword.innerText=`${A}A${B}B`;
+                _outword.style.backgroundColor="red";
+                _outword.style.color="#fff";
+            }
+            _div_1.classList.add('input-group-prepend');
+            _outword.classList.add('input-group-text');
+            _histroy.classList.add('form-control');
+            _div.classList.add('col-12');
+            _div.classList.add('input-group');
+
+
+            _div_1.appendChild(_outword);
+            _div.appendChild(_div_1);
+            _div.appendChild(_histroy);
+            stroy.appendChild(_div);
+
+            inputnumber.value = null;
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        function reset(){
+            alert(`放棄本輪遊戲，本輪答案為${parseInt(corrent[0])}${parseInt(corrent[1])}${parseInt(corrent[2])}${parseInt(corrent[3])}`);
+            inputnumber.value = null;
+            Btnrandomstart();
+            stroy.innerHTML="";
+        }
     </script>
 
     <!-- Optional JavaScript -->
