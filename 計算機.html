@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <title>計算機</title>
+  <style>
+    .row {
+      width: 300px;
+      margin-top: 10px;
+      background-color: powderblue;
+      border-radius: 5px;
+    }
+
+    .out-calculation {
+      width: 300px;
+      display: block;
+      margin: 0 10px;
+    }
+
+    .form-control:disabled {
+      background-color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container d-flex justify-content-center">
+    <div class="row">
+      <div class="input-group mb-3 mt-3 out-calculation">
+        <input type="text" id="inputnumber" class="form-control" placeholder="" aria-label="Username"
+          aria-describedby="basic-addon1" disabled>
+      </div>
+      <div class="flex-colunm mx-auto mb-2">
+        <div class="mb-2">
+          <button class="mx-1 btn btn-dark button_class" onclick="reset()">AC</button>
+          <button class="mx-1 btn btn-dark button_class" onclick="_delete()">C</button>
+          <button class="mx-1 btn btn-dark button_class" onclick="percent()">%</button>
+          <button class="mx-1 btn btn-dark button_class" onclick="division()">/</button>
+        </div>
+        <div class="mb-2">
+          <button class="mx-1 btn btn-dark button_class button_click">7</button>
+          <button class="mx-1 btn btn-dark button_class button_click">8</button>
+          <button class="mx-1 btn btn-dark button_class button_click">9</button>
+          <button class="mx-1 btn btn-dark button_class" onclick="multiplication()">*</button>
+        </div>
+        <div class="mb-2">
+          <button class="mx-1 btn btn-dark button_class button_click">4</button>
+          <button class="mx-1 btn btn-dark button_class button_click">5</button>
+          <button class="mx-1 btn btn-dark button_class button_click">6</button>
+          <button class="mx-1 btn btn-dark button_class" onclick="Subtraction()">-</button>
+        </div>
+        <div class="mb-2">
+          <button class="mx-1 btn btn-dark button_class button_click">1</button>
+          <button class="mx-1 btn btn-dark button_class button_click">2</button>
+          <button class="mx-1 btn btn-dark button_class button_click">3</button>
+          <button class="mx-1 btn btn-dark button_class" onclick="addition()">+</button>
+        </div>
+        <div class="mb-2">
+          <button class="mx-1 btn btn-dark button_class" onclick="Positive_negative()">+/-</button>
+          <button class="mx-1 btn btn-dark button_class button_click">0</button>
+          <button class="mx-1 btn btn-dark button_class" onclick="doc()">.</button>
+          <button class="mx-1 btn btn-dark button_class" onclick="equal()">=</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script>
+
+    var btn = document.getElementsByClassName('button_class');
+    var inputnumber = document.getElementById('inputnumber');
+    var button_click = document.getElementsByClassName('button_click');
+    var PN = document.getElementById('PN');
+
+    for (let item of btn) {
+      item.style.width = "50px";
+      item.style.textAlign = "center";
+    }
+
+    for (let item of button_click) {
+      item.onclick = function () {
+        inputnumber.value += item.innerText;
+      };
+    }
+
+    function reset() {
+      inputnumber.value = "";
+      firstnum = "";
+      lastnum = "";
+    }
+
+    function doc() {
+      if (inputnumber.value == "") {
+        inputnumber.value += "0.";
+      }
+      else {
+        var DOC = 0;
+        for (let i = 0; i < inputnumber.value.length; i++) {
+          if (inputnumber.value[i] == ".") {
+            DOC++;
+          }
+        }
+        if (DOC == 0) {
+          inputnumber.value += ".";
+        }
+      }
+    }
+
+    function Positive_negative() {
+      var N = 0;
+      var wait = 0;
+      for (let i = 0; i < inputnumber.value.length; i++) {
+        if (inputnumber.value[i] == "-") {
+          N++;
+        }
+      }
+      if (inputnumber.value == "") {
+        inputnumber.value += "-";
+      }
+      else if (N == 0) {
+        wait = inputnumber.value * (-1);
+        inputnumber.value = wait;
+      }
+      else if (N != 0) {
+        wait = inputnumber.value * (-1);
+        inputnumber.value = wait;
+      }
+    }
+
+    // var num=inputnumber.value.length;
+
+    function _delete() {
+      var wait=inputnumber.value;
+      console.log(wait);
+      inputnumber.value="";
+      if(wait.length<=1){
+        inputnumber.value="0";
+      }
+      else{
+        for(let i=0;i<wait.length-1;i++){
+          inputnumber.value+=wait[i];
+        }
+      }
+    }
+
+    function percent() {
+      if (inputnumber.value == "") {
+        inputnumber.value += "";
+      }
+      else {
+        if (inputnumber.value[inputnumber.value.length - 1] == "0" || inputnumber.value[inputnumber.value.length - 1] == "1" || inputnumber.value[inputnumber.value.length - 1] == "3" || inputnumber.value[inputnumber.value.length - 1] == "2" || inputnumber.value[inputnumber.value.length - 1] == "4" || inputnumber.value[inputnumber.value.length - 1] == "5" || inputnumber.value[inputnumber.value.length - 1] == "6" || inputnumber.value[inputnumber.value.length - 1] == "7" || inputnumber.value[inputnumber.value.length - 1] == "8" || inputnumber.value[inputnumber.value.length - 1] == "9") {
+          inputnumber.value=parseFloat(inputnumber.value)/100;
+        }
+        else inputnumber.value += "";
+      }
+    }
+
+    var firstnum = "";
+    var lastnum = "";
+    var judge="";
+
+    function division() {
+      judge="/";
+      if(firstnum==""){
+        firstnum = inputnumber.value;
+        inputnumber.value = "";
+        console.log(firstnum);
+      }
+      else{
+        lastnum=inputnumber.value;
+        console.log(lastnum);
+        inputnumber.value=firstnum/lastnum;
+        console.log(inputnumber.value);
+        firstnum=inputnumber.value;
+      }
+      lastnum="";
+    }
+    
+    function multiplication() {
+      judge="*";
+        if(firstnum==""){
+          firstnum = inputnumber.value;
+          inputnumber.value = "";
+          console.log(firstnum);
+        }
+        else{
+          lastnum=inputnumber.value;
+          console.log(lastnum);
+          inputnumber.value=firstnum*lastnum;
+          console.log(inputnumber.value);
+          firstnum=inputnumber.value;
+        }
+        lastnum="";    
+      }
+
+      function Subtraction(){
+        judge="-";
+        if(firstnum==""){
+          firstnum = inputnumber.value;
+          inputnumber.value = "";
+          console.log(firstnum);
+        }
+        else{
+          lastnum=inputnumber.value;
+          console.log(lastnum);
+          inputnumber.value=firstnum-lastnum;
+          console.log(inputnumber.value);
+          firstnum=inputnumber.value;
+        }
+        lastnum="";
+      }
+
+      function addition(){
+        judge="+";
+        if(firstnum==""){
+          firstnum = inputnumber.value;
+          inputnumber.value = "";
+          console.log(firstnum);
+        }
+        else{
+          lastnum=inputnumber.value;
+          console.log(lastnum);
+          inputnumber.value=parseFloat(firstnum)+parseFloat(lastnum);
+          console.log(inputnumber.value);
+          firstnum=inputnumber.value;
+        }
+        lastnum="";
+      }
+
+      function equal(){
+        if(judge=="+"){
+          addition();
+          judge="";
+          firstnum="";
+          lastnum="";
+        }
+        else if(judge=="-"){
+          Subtraction();
+          judge="";
+          firstnum="";
+          lastnum="";
+        }
+        else if(judge=="*"){
+          multiplication();
+          judge="";
+          firstnum="";
+          lastnum="";
+        }
+        else if(judge=="/"){
+          division();
+          judge="";
+          firstnum="";
+          lastnum="";
+        }
+      }
+
+  </script>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
