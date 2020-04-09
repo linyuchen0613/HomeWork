@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../Modules/MyHelper.js"></script>
+</head>
+
+<body>
+    <h1>台灣縣市郵遞區號資訊列表</h1>
+    <div id="msg"></div>
+
+    <template id="Taiwantitle">
+        <tr>
+            <th>縣市</th>
+            <th>區域</th>
+            <th>郵遞區號</th>
+        </tr>
+    </template>
+
+    <template id="Taiwanrow">
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </template>
+
+    <script>
+
+        let body=$g("body");
+        let table=$c("table");
+        table.setAttribute("border","2");
+        let thead=$c("thead");
+        let tbody=$c("tbody");
+        table.appendChild(thead);
+        table.appendChild(tbody);
+        let msg=$g("#msg");
+        let Address = "";
+
+        window.onload = function () {
+            let xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                if(xhr.readyState==4&&xhr.status==200){
+                    Address = JSON.parse(this.responseText);
+                    newAddressList=[];
+                    Address.forEach(item => {
+                        let newObj={City:item.CityName,Disricts:[]}; 
+                        item.AreaList.forEach(area =>{
+                            newObj.Disricts.push({Disrict:area.AreaName,Zip:area.ZipCode});
+                        });
+                        newAddressList.push(newObj);
+                        // for(let i in newObj.Disricts){
+                        //     console.log(newObj.Disricts);
+                        // }
+                    });
+                    // console.log(newAddressList);
+                    addThead(Taiwantitle);
+
+                    newAddressList.forEach(element => {
+                        addTbody(Object.values(element));
+                    });
+
+                    // 規劃畫面 body > table (放資料)
+
+                    // 父 > table > thead,tbody > tr > th,td
+                    // 找父 -> document.getElmentByTag('body')[0];
+                    // Create -> document.createElement();
+
+                }
+
+                else{
+                    msg.textContent='發生錯誤，HTTP response代碼:'+xhr.status;
+                }
+
+            }
+            xhr.open("GET", 'http://127.0.0.1:5501/TaiwanAddress/TaiwanAddress.json');
+            xhr.send();
+            body.appendChild(table);
+        };
+
+
+        function addThead(){
+            let Taiwantitle=$g('#Taiwantitle');
+            let cloneContent = Taiwantitle.content.cloneNode(true);     
+            thead.appendChild(cloneContent); 
+        } 
+
+        function addTbody(rowArray){
+            let Taiwanrow=$g('#Taiwanrow');
+            
+            console.log(rowArray[1]);
+            for(let i=0;i<rowArray[1].length;i++){
+                let cloneContent = Taiwanrow.content.cloneNode(true);     
+            let tds = cloneContent.querySelectorAll('td'); 
+                tds[0].textContent = rowArray[0];     
+                tds[1].textContent = rowArray[1][i].Disrict;     
+                tds[2].textContent = rowArray[1][i].Zip;
+                tbody.appendChild(cloneContent);
+            }
+            
+
+            
+        }
+
+    </script>
+</body>
+
+</html>
