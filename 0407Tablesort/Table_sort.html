@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sort_table</title>
+</head>
+
+<body>
+   
+    <template class="container" id="templateTitle">
+        <tr>
+            <th onclick="check('one')">產品編號</th>
+            <th onclick="check('two')">售價</th>
+            <th onclick="check('three')">儲存容量</th>
+            <th onclick="check('four')">說明</th>
+        </tr>
+    </template>
+
+    <template class="container" id="templateRow">
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </template>
+
+    <script>
+
+        let body=document.getElementsByTagName("body")[0];
+        let table=document.createElement("table");
+        table.setAttribute("border","2");
+        let thead=document.createElement("thead");
+        let tbody=document.createElement("tbody");
+        table.appendChild(thead);
+        table.appendChild(tbody);
+
+
+        let msg=document.getElementById("msg");
+        let ipad = "";
+        window.onload = function () {
+            let xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                if(xhr.readyState==4&&xhr.status==200){
+                   
+                    ipad = JSON.parse(this.responseText);
+                    console.log(ipad);
+                    addThead(templateTitle);
+
+                    ipad.forEach(element => {
+                        addTbody(Object.values(element));
+                    });
+                }
+
+                else{
+                    msg.textContent='發生錯誤，HTTP response代碼:'+xhr.status;
+                }
+            }
+            xhr.open("GET", 'http://127.0.0.1:5500/Table_sort.js');
+            xhr.send();
+            body.appendChild(table);
+        };
+
+        function addThead(){
+            let templateTitle=document.getElementById('templateTitle');
+            let cloneContent = templateTitle.content.cloneNode(true);
+            thead.appendChild(cloneContent); 
+        } 
+
+        function addTbody(rowArray){
+            let templateRow=document.getElementById('templateRow');
+            let cloneContent = templateRow.content.cloneNode(true);     
+            let tds = cloneContent.querySelectorAll('td'); 
+          
+            tds[0].textContent = rowArray[0];     
+            tds[1].textContent = rowArray[1];     
+            tds[2].textContent = rowArray[2];     
+            tds[3].textContent = rowArray[3];
+
+            tbody.appendChild(cloneContent);
+        }
+        var _cilck=0;
+        function check(num){
+            let Result;
+            
+            if(num=='one'){
+                if(_cilck==0){
+                    Result=ipad.sort(function (a,b){
+                        return a.sku>b.sku?1:-1;
+                    })
+                    _cilck++;
+                }
+                else{
+                    Result=ipad.sort(function (a,b){
+                        return a.sku<b.sku?1:-1;
+                    })
+                    _cilck--;
+                }
+            }
+            else if(num=="two"){
+                if(_cilck==0){
+                    Result=ipad.sort(function (a,b){
+                        return a.price>b.price?1:-1;
+                    })
+                    _cilck++;
+                }
+                else{
+                    Result=ipad.sort(function (a,b){
+                        return a.price<b.price?1:-1;
+                    })
+                    _cilck--;
+                }
+            }
+            else if(num=="three"){
+                if(_cilck==0){
+                    Result=ipad.sort(function (a,b){
+                        return a.storage<b.storage?1:-1;
+                    })
+                    _cilck++;
+                }
+                else{
+                    Result=ipad.sort(function (a,b){
+                        return a.storage>b.storage?1:-1;
+                    })
+                    _cilck--;
+                }
+            }
+            else if(num=="four"){
+                if(_cilck==0){
+                    Result=ipad.sort(function (a,b){
+                        return a.description<b.description?1:-1;
+                    })
+                    _cilck++;
+                }
+                else{
+                    Result=ipad.sort(function (a,b){
+                        return a.description>b.description?1:-1;
+                    })
+                    _cilck--;
+                }
+            }
+            ipad=Result;
+            tbody.innerHTML="";
+            ipad.forEach(element => {
+                    addTbody(Object.values(element));
+                });
+        }
+    </script>
+
+</body>
+
+</html>
