@@ -94,7 +94,7 @@
             console.log(rowArray[1]);
             for(let i=0;i<rowArray[1].length;i++){
                 let cloneContent = Taiwanrow.content.cloneNode(true);     
-            let tds = cloneContent.querySelectorAll('td'); 
+                let tds = cloneContent.querySelectorAll('td'); 
                 tds[0].textContent = rowArray[0];     
                 tds[1].textContent = rowArray[1][i].Disrict;     
                 tds[2].textContent = rowArray[1][i].Zip;
