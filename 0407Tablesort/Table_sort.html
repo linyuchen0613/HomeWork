@@ -58,7 +58,7 @@
                     msg.textContent='發生錯誤，HTTP response代碼:'+xhr.status;
                 }
             }
-            xhr.open("GET", 'http://127.0.0.1:5500/0407Tablesort/Table_sort.js');
+            xhr.open("GET", 'http://127.0.0.1:5500/Table_sort.js');
             xhr.send();
             body.appendChild(table);
         };
@@ -81,64 +81,67 @@
 
             tbody.appendChild(cloneContent);
         }
-        var _cilck=0;
+        var _cilck0=0;
+        var _cilck1=0;
+        var _cilck2=0;
+        var _cilck3=0;
         function check(num){
             let Result;
             
             if(num=='one'){
-                if(_cilck==0){
+                if(_cilck0==0){
                     Result=ipad.sort(function (a,b){
                         return a.sku>b.sku?1:-1;
                     })
-                    _cilck++;
+                    _cilck0++;
                 }
                 else{
                     Result=ipad.sort(function (a,b){
                         return a.sku<b.sku?1:-1;
                     })
-                    _cilck--;
+                    _cilck0--;
                 }
             }
             else if(num=="two"){
-                if(_cilck==0){
+                if(_cilck1==0){
                     Result=ipad.sort(function (a,b){
                         return a.price>b.price?1:-1;
                     })
-                    _cilck++;
+                    _cilck1++;
                 }
                 else{
                     Result=ipad.sort(function (a,b){
                         return a.price<b.price?1:-1;
                     })
-                    _cilck--;
+                    _cilck1--;
                 }
             }
             else if(num=="three"){
-                if(_cilck==0){
+                if(_cilck2==0){
                     Result=ipad.sort(function (a,b){
                         return a.storage<b.storage?1:-1;
                     })
-                    _cilck++;
+                    _cilck2++;
                 }
                 else{
                     Result=ipad.sort(function (a,b){
                         return a.storage>b.storage?1:-1;
                     })
-                    _cilck--;
+                    _cilck2--;
                 }
             }
             else if(num=="four"){
-                if(_cilck==0){
+                if(_cilck3==0){
                     Result=ipad.sort(function (a,b){
                         return a.description<b.description?1:-1;
                     })
-                    _cilck++;
+                    _cilck3++;
                 }
                 else{
                     Result=ipad.sort(function (a,b){
                         return a.description>b.description?1:-1;
                     })
-                    _cilck--;
+                    _cilck3--;
                 }
             }
             ipad=Result;
