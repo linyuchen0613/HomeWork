@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>fakeLOL</title>
+    <style>
+        #name_card {
+            width: 100%;
+            line-height: 45px;
+            font-size: 20px;
+            padding: 0.5% 0;
+            color: transparent;
+        }
+
+        #_div {
+            margin: -15px 0 0;
+        }
+
+        #card:hover #_div {
+            background-color: rgba(50, 50, 50, .8);
+            transition: .5s;
+        }
+
+        #card:hover #name_card {
+            color: #ccc;
+            transition: .5s;
+        }
+        .btn:focus {
+            box-shadow: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="contain">
+        <div class="row no-gutters" id="row"></div>
+    </div>
+
+
+    <template id="temp">
+        <div class="card col-12 col-sm-6 col-md-4 col-xl-3 position-relative" id="card" style="width: 18rem;">
+            <img src="" class="card-img-top" alt="圖片說明" id="pic">
+            <div class="card-body position-absolute fixed-bottom" id="_div">
+                <button id="name_card" type="button" class="btn" data-toggle="modal" data-target="#exampleModal">Role
+                    profile</button>
+            </div>
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="exampleModalLabel">Modal title</h4>
+                        </div>
+                        <div class="modal-body" id="modal_body">
+                            <h5 id="_h5"></h5>
+                            <p class="_p"></p>
+                            <p class="_p"></p>
+                            <p class="_p"></p>
+                            <p class="_p"></p>
+                            <p class="_p"></p>
+                            <p class="_p"></p>
+                            <p class="_p"></p>
+                            <p class="_p"></p>
+                            <p class="_p"></p>
+                            <p class="_p"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+    <script>
+
+        let body = document.getElementsByTagName('body')[0];
+        let row = document.getElementById('row');
+        let lolarray;
+
+        window.onload = function () {
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", "http://127.0.0.1:5500/0409LOL/LOL.json");
+            xhr.send();
+            xhr.onload = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    lolarray = JSON.parse(this.responseText);
+                    console.log(lolarray);
+                    lolarray.forEach(element => {
+                        addallrole(Object.values(element));
+                    });
+
+                }
+
+                else {
+                    body.textContent = '發生錯誤，HTTP response代碼:' + xhr.status;
+                }
+            }
+        }
+
+        function addallrole(rowArray) {
+            let temp = document.querySelector('#temp').content;
+            let cloneContent = temp.cloneNode(true);
+            let card = cloneContent.getElementById('card');
+            let name = cloneContent.getElementById("name_card");
+            let title = cloneContent.getElementById("title_card");
+            let _pic = cloneContent.getElementById("pic");
+
+            let _h4 = cloneContent.querySelector('h4');
+            let _h5 = cloneContent.getElementById('_h5');
+            let _ps = cloneContent.querySelectorAll('._p');
+
+
+            name.innerHTML = rowArray[0];
+            _pic.src = rowArray[5];
+
+            
+            name.onclick=function(){
+                
+                _h4.innerHTML = rowArray[0];
+                _h5.textContent = rowArray[2];
+                _ps[0].textContent = " role : " + rowArray[3][0];
+                _ps[1].textContent = "  HP : " + rowArray[4].HP;
+                _ps[2].textContent = "  MP : " + rowArray[4].MP;
+                _ps[3].textContent = "  ATK : " + rowArray[4].ATK;
+                _ps[4].textContent = "  DEF : " + rowArray[4].DEF;
+                _ps[5].textContent = "  MDEF : " + rowArray[4].MDEF;
+                _ps[6].textContent = "  CON : " + rowArray[4].CON;
+                _ps[7].textContent = "  MND : " + rowArray[4].MND;
+                _ps[8].textContent = "  SPD : " + rowArray[4].SPD;
+                _ps[9].textContent = "  RNG : " + rowArray[4].RNG;
+
+                console.log(rowArray[3][0]);
+
+                // _h5.textContent.join(_br);
+                $('#exampleModal').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget); 
+                    var recipient = button.data('whatever');
+                    var modal = $(this);
+                    modal.find('.modal-title').text(_h4.innerHTML);
+                    modal.find('.modal-body').text(_h5.textContent+_ps[0].textContent+_ps[1].textContent+_ps[2].textContent+_ps[3].textContent+_ps[4].textContent+_ps[5].textContent+_ps[6].textContent+_ps[7].textContent+_ps[8].textContent+_ps[3].textContent);
+                })
+                row.appendChild(cloneContent);
+            }
+
+            row.appendChild(cloneContent);
+        }
+
+        function roleinfo(){
+            
+        }
+    </script>
+
+</body>
+
+</html>
