@@ -1,0 +1,215 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <title>拼圖遊戲</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .puzzlePart {
+            position: relative;
+        }
+
+        #puzzlePart * {
+            vertical-align: bottom;
+        }
+
+        .puzzlePart canvas {
+            display: table-cell;
+            position: absolute;
+            cursor: pointer;
+            border: solid #ccc 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="col-12 col-md-6 d-flex justify-content-center m-2 mx-auto">
+        <div>
+            <button type="button" id="RanStartBtn" class="btn btn-outline-info" onclick="RanStart()">遊戲開始</button>
+            <button type="button" id="AutoBtn" disabled = 'disabled' class="btn btn-outline-info">自動完成</button>
+        </div>
+        <div>
+            <select class="form-control btn btn-outline-info ml-2" id="choiceOne" onchange="choice()">
+                <option selected value="3">選擇難易度</option>
+                <option value="3">3X3</option>
+                <option value="4">4X4</option>
+                <option value="5">5X5</option>
+            </select>
+        </div>
+        <div><button class="btn btn-outline-info ml-3" onclick="showImg()">原圖</button></div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-6 d-flex justify-content-start mx-auto">
+                <div class="puzzlePart" id="puzzlePart">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="AnsPic" tabindex="-1" role="dialog" aria-labelledby="Title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="Title">Ans Picture</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <img class="w-100" src="https://picsum.photos/500/400?random=1" alt="Ans">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <script>
+        var puzzleImg = new Image();
+        puzzleImg.src = "https://picsum.photos/500/400?random=1";
+        var whiteImg = new Image();
+        whiteImg.src = '/Puzzle/White.jpg';
+
+        
+        var puzzleCanvas = document.querySelectorAll('#pizzlePart canvas');
+        console.log(puzzleCanvas);
+        var puzzleArea = document.getElementById('puzzlePart');
+        
+        let pathway = [];
+        let ans = [];
+        let degree = document.getElementById('choiceOne').value;
+        function choice() {
+            degree = document.getElementById('choiceOne').value;
+            puzzleArea.innerHTML = '';
+            pathway = [];
+            creatPicture();
+        }
+        function creatPicture() {
+            let pWidth = (puzzleImg.width / degree);
+            let pHeight = (puzzleImg.height / degree);
+            for (let y = 0; y < degree; y++) {
+                for (let x = 0; x < degree; x++) {
+                    let canvas = document.createElement('canvas');
+                    canvas.setAttribute('id', `y${y}x${x}`);
+                    canvas.height = pHeight;
+                    canvas.width = pWidth;
+                    let canvasContext = canvas.getContext('2d');
+                    if (y == 0 && x == 0) {
+                        canvasContext.drawImage(whiteImg, x * pWidth, y * pHeight, pWidth, pHeight, 0, 0, pWidth, pHeight);
+                        canvas.setAttribute('class', 'white');
+                        canvas.style.cssText = 'top:0px;left:0px;';
+                        pathway.push({ top: 0, left: 0 });
+                    }
+                    else {
+                        canvasContext.drawImage(puzzleImg, x * pWidth, y * pHeight, pWidth, pHeight, 0, 0, pWidth, pHeight);
+                        canvas.setAttribute('class', 'moveable');
+                        canvas.style.cssText = `top:${y * pHeight}px;left:${x * pWidth}px;`;
+                        pathway.push({ top: y * pHeight, left: x * pWidth });
+                        canvas.addEventListener('click', move)
+                        function move() {
+                            let pWidth = (puzzleImg.width / degree);
+                            let pHeight = (puzzleImg.height / degree);
+                            var whiteBlock = document.getElementsByClassName('white')[0];
+                            if (this.offsetTop == whiteBlock.offsetTop &&
+                                (isSame(this.offsetLeft + pWidth) == isSame(whiteBlock.offsetLeft) || isSame(this.offsetLeft - pWidth) == isSame(whiteBlock.offsetLeft))) {
+                                let this_x = this.offsetLeft;
+                                let this_y = this.offsetTop;
+                                this.style.cssText = `top:${whiteBlock.offsetTop}px;left:${whiteBlock.offsetLeft}px;`;
+                                whiteBlock.style.cssText = `top:${this_y}px;left:${this_x}px;`;
+                            }
+                            else if (this.offsetLeft == whiteBlock.offsetLeft &&
+                                (isSame(this.offsetTop + pHeight) == isSame(whiteBlock.offsetTop) || isSame(this.offsetTop - pHeight) == isSame(whiteBlock.offsetTop))) {
+                                let this_x = this.offsetLeft;
+                                let this_y = this.offsetTop;
+                                this.style.cssText = `top:${whiteBlock.offsetTop}px;left:${whiteBlock.offsetLeft}px;`;
+                                whiteBlock.style.cssText = `top:${this_y}px;left:${this_x}px;`;
+                            }
+
+                        }
+                    }
+                    puzzleArea.appendChild(canvas);
+                }
+            }
+
+        }
+        puzzleImg.onload = function () {
+            creatPicture();
+        }
+
+
+     
+        function isSame(n1, n2) {
+            return parseInt(n1) == parseInt(n2);
+        }
+        function RanStart() {
+            let step = 400;
+            while (step > 0) {
+                var MoveBlock = document.getElementsByClassName('moveable');
+                let ranLength = MoveBlock.length - 1;
+                let randomNum = Math.floor(Math.random() * ranLength);
+
+                let pWidth = (puzzleImg.width / degree);
+                let pHeight = (puzzleImg.height / degree);
+                var whiteBlock = document.getElementsByClassName('white')[0];
+                if (MoveBlock[randomNum].offsetTop == whiteBlock.offsetTop &&
+                    (isSame(MoveBlock[randomNum].offsetLeft + pWidth) == isSame(whiteBlock.offsetLeft) || isSame(MoveBlock[randomNum].offsetLeft - pWidth) == isSame(whiteBlock.offsetLeft))) {
+                    let this_x = MoveBlock[randomNum].offsetLeft;
+                    let this_y = MoveBlock[randomNum].offsetTop;
+                    MoveBlock[randomNum].style.cssText = `top:${whiteBlock.offsetTop}px;left:${whiteBlock.offsetLeft}px;`;
+                    whiteBlock.style.cssText = `top:${this_y}px;left:${this_x}px;`;
+                    step--;
+                    ans.push(randomNum);
+                }
+                else if (MoveBlock[randomNum].offsetLeft == whiteBlock.offsetLeft &&
+                    (isSame(MoveBlock[randomNum].offsetTop + pHeight) == isSame(whiteBlock.offsetTop) || isSame(MoveBlock[randomNum].offsetTop - pHeight) == isSame(whiteBlock.offsetTop))) {
+                    let this_x = MoveBlock[randomNum].offsetLeft;
+                    let this_y = MoveBlock[randomNum].offsetTop;
+                    MoveBlock[randomNum].style.cssText = `top:${whiteBlock.offsetTop}px;left:${whiteBlock.offsetLeft}px;`;
+                    whiteBlock.style.cssText = `top:${this_y}px;left:${this_x}px;`;
+                    step--;
+                    ans.push(randomNum);
+                }
+            }
+        }
+        function success() {
+
+
+        }
+        function showImg() {
+            $('#AnsPic').modal('toggle');
+        }
+    </script>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
+
+
